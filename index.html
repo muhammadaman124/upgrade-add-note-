@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic List App</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #222;
+      text-align: center;
+      font-size: clamp(24px, 5vw, 32px);
+    }
+
+    .subtitle {
+      margin-bottom: 25px;
+      color: #777;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      outline: none;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      padding: 14px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #667eea;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #4f5fd0;
+      transform: translateY(-1px);
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #b8c4ff;
+      outline-offset: 3px;
+    }
+
+    .list-heading {
+      margin-bottom: 12px;
+      color: #444;
+      font-size: 17px;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+
+    li {
+      padding: 14px 16px;
+      overflow-wrap: anywhere;
+      background: #f4f5fb;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+      color: #333;
+      animation: appear 0.25s ease;
+    }
+
+    .empty-message {
+      padding: 20px 10px;
+      color: #888;
+      text-align: center;
+      background: #f9fafb;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        padding: 22px 16px;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      input,
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>My Task List</h1>
+    <p class="subtitle">Add your ideas and keep everything organized.</p>
+
+    <div class="input-group">
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Enter your task..."
+        aria-label="Enter a new task"
+        maxlength="200"
+      />
+
+      <button type="button" id="addButton">
+        + Add Task
+      </button>
+    </div>
+
+    <h2 class="list-heading">Your Tasks</h2>
+
+    <ul id="taskList">
+      <li class="empty-message" id="emptyMessage">
+        No tasks yet. Add your first task!
+      </li>
+    </ul>
+  </main>
+
+  <script>
+    const input = document.getElementById("taskInput");
+    const button = document.getElementById("addButton");
+    const ul = document.getElementById("taskList");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    function addTask() {
+      const taskText = input.value.trim();
+
+      // Prevent empty tasks
+      if (taskText === "") {
+        input.focus();
+        return;
+      }
+
+      // Remove the empty-state message
+      if (emptyMessage) {
+        emptyMessage.remove();
+      }
+
+      // Create a new li element using JavaScript
+      const li = document.createElement("li");
+
+      // Add the input text safely
+      li.textContent = taskText;
+
+      // Append the li as a child of the ul
+      ul.appendChild(li);
+
+      // Clear input and focus it for the next task
+      input.value = "";
+      input.focus();
+    }
+
+    // Add a task when the button is clicked
+    button.addEventListener("click", addTask);
+
+    // Also support pressing Enter
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    });
+  </script>
+</body>
+</html>
